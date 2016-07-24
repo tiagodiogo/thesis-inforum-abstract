@@ -48,37 +48,50 @@
 %                                     also used for the TOC unless
 %                                     \toctitle is used
 %
-\author{Tiago Diogo e Miguel Pardal}
+\author{Tiago Diogo e Miguel L. Pardal}
 %
 \authorrunning{Tiago Diogo et al.} % abbreviated author list (for running head)
 %
 %%%% list of authors for the TOC (use if author list has to be modified)
-\tocauthor{Tiago Diogo, Miguel Pardal}
+\tocauthor{Tiago Diogo, Miguel L. Pardal}
 %
 \institute{Instituto Superior Técnico, Av. Rovisco Pais, 1, 1049-001 Lisboa, Portugal,\\
 \email{\{tiago.diogo,miguel.pardal\}@tecnico.ulisboa.pt}}
 
 \maketitle              % typeset the title of the contribution
 
-A \ac{IdC} pode ser vista como uma teia de dispositivos interligados entre si que vão desde vestuário inteligente (\textit{wearables}) até redes de sensores de gama empresarial. Apesar da enorme variedade e diferenças entre estes dispositivos, algo que todos têm em comum é a sua limitação de recursos. Dada esta variedade de ambientes, uma brecha na segurança destas redes pode implicar uma fuga de informação confidencial ou prover informações sobre as escolhas e paradeiro de um largo número de indivíduos constituindo uma violação de privacidade \cite{Ukil2015}. Estas são preocupações reais apoiadas por uma gama de ataques que se foca em desactivar redes \ac{IdC} por colocar os seus nós \textit{offline}, conhecidos como  ataques ``vampiro''. Estes, focam-se em drenar as baterias -- a ``vida'' -- dos dispositivos, trabalhando ao longo do tempo para desativar completamente a rede \cite{Vasserman2013}\cite{Pongle2015}. Embora existam estratégias de mitigação para estes ataques \cite{Vasserman2013}, elas implicam verificações e validações adicionais em cada nó e para cada pacote, colocando um pesado fardo sobre estes nós com recursos muito limitados. Mais ainda, para cada ataque adicional que quiséssemos mitigar, mais validações teriam de ser empregues e mais energia gasta no processo.
+A \ac{IdC} pode ser vista como uma teia de dispositivos interligados entre si que vão desde vestuário inteligente (\textit{wearables}) até redes de sensores de gama empresarial. 
+Apesar da enorme variedade e diferenças entre estes dispositivos, algo que todos têm em comum é a sua limitação de recursos. 
+Dada esta variedade de ambientes, uma brecha na segurança destas redes pode implicar uma fuga de informação confidencial ou prover informações sobre as escolhas e paradeiro de um largo número de indivíduos constituindo uma violação de privacidade \cite{Ukil2015}. 
+Estas são preocupações reais apoiadas por uma gama de ataques que se foca em desativar redes \ac{IdC} por colocar os seus nós \textit{offline}, conhecidos como  ataques ``vampiro''. 
+Estes ataques focam-se em drenar as baterias -- a ``vida'' -- dos dispositivos, atuando ao longo do tempo para desativar completamente a rede \cite{Vasserman2013}\cite{Pongle2015}. 
+Embora existam estratégias de mitigação para estes ataques \cite{Vasserman2013}, elas implicam verificações e validações adicionais em cada nó e para cada pacote, colocando um pesado fardo sobre estes nós com recursos muito limitados. 
+Mais ainda, para cada ataque adicional que quiséssemos mitigar, mais validações teriam de ser empregues e mais energia gasta no processo.
 Para resolver este problema, propomos que um arranque (\textit{bootstrapping}) seguro seja efetuado para cada novo dispositivo da rede onde:
 \begin{itemize}
 	\item{Não é necessário \textit{hardware} adicional durante a instalação no terreno};
 	\item{Não é necessário obter credenciais adicionais após instalação no terreno};
 	\item{Não é necessário recorrer a terceiros para gerar ou instalar credenciais};
-	\item{Todas as mensagens enviadas na rede são cifradas e autenticadas desde o primeiro momento}
+	\item{Todas as mensagens enviadas na rede são cifradas e autenticadas desde o primeiro momento}.
 \end{itemize}
-Chamámos à nossa solução AutoStrap porque se destina a permitir um processo de \textit{bootstrapping} seguro e eficiente, que tenha o mínimo de interação necessária com os operadores do sistema e não necessite de conhecimento interno do sistema para ser usado. 
+Chamámos à nossa solução \emph{AutoStrap} porque se destina a permitir um processo de \textit{bootstrapping} seguro e eficiente, que tenha o mínimo de interação necessária com os operadores do sistema e não necessite de conhecimento interno do sistema para ser usado. 
 O principio de funcionamento do AutoStrap é a adição de um novo componente na arquitetura da infraestrutura -- o \textit{bootstrapper} -- que é responsável pela escrita para o dispositivo de todos os identificadores e credenciais de segurança necessários para uma operação que responda aos objetivos e requisitos do sistema, sem necessidade de obter credenciais após o inicio da fase de operação ou de confiar em credenciais criadas por terceiros. 
-As credenciais utilizadas são um identificador único e uma chave de 128 bits usada pelo protocolo \ac{AES} \cite{Fips2001} no modo \ac{CCM}. 
-O uso desta chave e protocolo permite que os pacotes tenham o seu conteúdo cifrado e o seu cabeçalho autenticado com um \ac{MIC} também gerado a partir dessa mesma chave. Isto assegura que todos os pacotes que se propagam na rede são confidenciais, íntegros e autênticos. 
+As credenciais utilizadas são um identificador único e uma chave de 128 bits usada pelo protocolo \ac{AES} \cite{Fips2001} no modo \ac{CCM}.
+O uso desta chave e protocolo permite que os pacotes tenham o seu conteúdo cifrado e o seu cabeçalho autenticado com um \ac{MIC} também gerado a partir dessa mesma chave. 
+Isto assegura que todos os pacotes que se propagam na rede são confidenciais, íntegros e autênticos. 
 Desta forma, os ``vampiros'' não serão capazes de se introduzir na topologia, frustrando assim as suas tentativas de conduzir ataques de esgotamento de bateria.
-Mais ainda, fazemos uso das potencialidades dos protocolos de nível aplicacional para colocar um único cliente na rede. Assim, em vez de termos utilizadores a requisitar novas leituras directamente aos sensores da rede com recursos limitados, este cliente regista-se junto dos dispositivos existentes e é notificado de cada novo valor ou evento despoletado pelos dispositivos.
-Para avaliar o nosso sistema, medimos e documentamos os recursos físicos necessários para suportar os protocolos e estratégias de mitigação escolhidas de forma a entender se são adequados ao \textit{hardware} usado na \ac{IdC}. Após validar que o sistema era adequado, conduzimos testes de usabilidade ao nosso sistema de gestão de redes para analisar a sua eficiência e facilidade de uso.
+Mais ainda, fazemos uso das potencialidades dos protocolos de nível aplicacional para colocar um único cliente na rede. 
+Assim, em vez de termos utilizadores a requisitar novas leituras diretamente aos sensores da rede com recursos limitados, este cliente regista-se junto dos dispositivos existentes e é notificado de cada novo valor ou evento despoletado pelos dispositivos.
+
+Para avaliar o nosso sistema, medimos e documentamos os recursos físicos necessários para suportar os protocolos e estratégias de mitigação escolhidas de forma a entender se são adequados ao \textit{hardware} usado na \ac{IdC}. 
+Após validar que o sistema era adequado, conduzimos testes de usabilidade ao nosso sistema de gestão de redes para analisar a sua eficiência e facilidade de uso.
 Analisando os resultados podemos verificar que a introdução destes mecanismos comporta um aumento de 3.02\% na utilização de memória \textit{flash} e 1.02\% na utilização de memória \ac{RAM}, permitindo-nos concluir que apenas uma pequena fração de memória adicional é usada.
-Em relação aos consumos energéticos, a nossa solução mantém um baixo consumo por empregar um protocolo de \ac{RDC} capaz de manter o rádio, a componente que mais consome no hardware, desligada durante cerca de 99\% do tempo de utilização \cite{Dunkels2011}. O processo de bootstrappaing em sí pode ser conduzido num tempo total de 12 segundos por dispositivo.
-Desta forma podemos concluir que a nossa solução é prática e adequada aos cenários \ac{IdC}.
-Como trabalho futuro, salientamos a necessidade de proteção da memória dos dispositivos para impedir o roubo de credenciais de segurança e consequente clonagem dos dispositivos. Deixamos como sugestão o uso de circuitos integrados com mecanismos de impedimento de leitura ou o bloqueio via software de certas regiões de memória dos dispositivos onde residem as chaves de rede.
+Em relação aos consumos energéticos, a nossa solução mantém um baixo consumo por empregar um protocolo de \ac{RDC} capaz de manter o rádio, a componente que mais consome energia no \textit{hardware}, desligada durante cerca de 99\% do tempo de utilização \cite{Dunkels2011}. 
+O processo de \textit{bootstrapping} em si pode ser conduzido num tempo total de 12 segundos por dispositivo.
+Desta forma podemos concluir que a nossa solução é prática e adequada aos cenários de utilização \ac{IdC}.
+
+Como trabalho futuro, salientamos a necessidade de proteção da memória dos dispositivos para impedir o roubo de credenciais de segurança e consequente clonagem dos dispositivos. 
+Deixamos como sugestão o uso de circuitos integrados com mecanismos de impedimento de leitura ou o bloqueio via software de certas regiões de memória dos dispositivos onde residem as chaves de rede.
 %
 % ---- Bibliography ----
 
